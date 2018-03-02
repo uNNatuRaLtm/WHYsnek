@@ -1,4 +1,5 @@
-## This here is a battlesnake-2018 contender (in the process of being born) using python (Flask, not bottle)
+## A Battlesnake-2018 contender (in the process of being born)
+The following is more of an About than Readme. Being written in python (using Flask), TBD soon.    
 
 ## The "Machine Learning" approach ..
 .. would be if it got better over time on its own, but that needs a *LOT* of examples of games and decision feedback (which I don't have. And even if I did, wouldn't necessarily be able to implement by tomorrow.) It would also require modding the board server to continuously run games, etc, and storing histories of game states somewhere, which I don't know the most efficient way to do. (If someone could help me with that it would be awesome. Thanks!) This is analytically the optimal approach but the total number of states is larger than (humankind's best estimate of) the number of molecules in the universe, and may not be required for getting good enough solution to this problem (I hope).
@@ -12,6 +13,7 @@ So instead, I will attempt ..
 
 .. 
 ... *Surviving*, as long as possible. __Be__ the snek!
+.... Wish I had enough expertize to give it an HTM brain .. but first things first.   
 
 ## Seriously though.. step by step..
 
