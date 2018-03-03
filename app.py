@@ -30,8 +30,8 @@ def start():
     
     return jsonify(
         color = "#e3c3d3",
-        name = "Hunter",
-        taunt = "better now?!",
+        name = "JoblessSnake",
+        taunt = "Seriously?!",
         head_type = "fang",
         tail_type = "regular",
         secondary_color = "#f4f4f0",
@@ -58,10 +58,12 @@ def move():
     
     # Foods
     food_points = list(zip(find('x',food),find('y',food)))
-
+    sho('Food points: '+str(food_points))
     # Snakes
-    snake_points = list(zip(find('x',snakes),find('y',snakes)))
-
+    snake_points=[]
+    for snake in snakes:
+        snake_points.extend(zip(find('x',snake),find('y',snake)))
+    sho('Snake points: ' + str(snake_points))
     goNext = ['up','right','down','left']
     
     # Make grid with edges (w+2)x(h+2) with survival score (-1 is ded?) and implement basic constraints
@@ -75,9 +77,9 @@ def move():
 
     # Scores are context dependent (defined as behaviours like grow, chill, kill)
     if mySnake["health"] > 90:
-        food_reward = 0
-    elif mySnake["health"] > 70:
         food_reward = 0.5
+    elif mySnake["health"] > 70:
+        food_reward = 0.7
     elif mySnake["health"] > 50:
         food_reward = 1
     elif mySnake["health"] > 20:
@@ -85,26 +87,49 @@ def move():
     # Scores given to +events can be varied later to tune behaviour
     
     for x,y in food_points:
-        board[y,x] += (math.fabs(x-hx)+math.fabs(y-hy)+2)*food_reward # Scale by Manhattan distance
+        board[y+1,x+1] = food_reward # * (math.fabs(x-hx)+math.fabs(y-hy)+2) # Scale by Manhattan distance when looking far.
 
     for x,y in snake_points:
-        board[y,x] = -1
+        board[y+1,x+1] = -1
 
+    board[hy+1,hx+1] = -5
     # Later try ?vector fields? .. many steps of free space ahead is same but closed/walled-off spaces get exponentially worse.
     # Later try heading to corners?
 
     # Decision time!
+    # Raw value
+    space = [board[hy,hx+1], board[hy+1,hx+2], board[hy+2,hx+1], board[hy+1,hx]]
+    
+    # Give more sight (or more like smell)-
+    space = list(map(lambda a,b:a+np.mean(b), space, [board[:hy+1,hx+1],board[hy+1,hx+2:],board[hy+2:,hx+1],board[hy+1,:hx+1]]))
 
-    decision = space.index(max(board[hy,hx+1], board[hy+1,hx+2], board[hy+2,hx+1], board[hy+1,hx]))
+    # Give randomness
+    space = list(map(lambda a,b:a+b/2, space,np.random.rand(4)))
+
+
+    decision = space.index(max(space))
+    sho(goNext[decision])
+    sho(board)
+    sho(space)
     ##
     end = timer() # Del later
-    sho("RUNTIME: {0}ms. MAX 200ms, currently using {1}%".format(((end - start) * 1000),(((end - start) * 1000) / 2)))
+    sho("RUNTIME: {0}ms. MAX 120ms, currently using {1}%".format(((end - start) * 1000),(((end - start) * 1000) / 1.2)))
     ##
     
+    # Overwrite board in same file
+
+
     return jsonify(
         move = goNext[decision],
-        taunt = msg
+        taunt = 'msg'
     )
+
+#log and learn?
+@app.route("/end", methods=["POST"])
+def end():
+    data=request.get_json()
+
+
 
 
 if __name__ == "__main__":
