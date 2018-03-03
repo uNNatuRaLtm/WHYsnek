@@ -77,9 +77,9 @@ def move():
 
     # Scores are context dependent (defined as behaviours like grow, chill, kill)
     if mySnake["health"] > 90:
-        food_reward = 0.5
+        food_reward = 0
     elif mySnake["health"] > 70:
-        food_reward = 0.7
+        food_reward = 0.3
     elif mySnake["health"] > 50:
         food_reward = 1
     elif mySnake["health"] > 20:
@@ -128,6 +128,8 @@ def move():
 @app.route("/end", methods=["POST"])
 def end():
     data=request.get_json()
+    with open("survivedTurns.txt","a") as fo:
+        fo.write(str(data))
 
 
 
