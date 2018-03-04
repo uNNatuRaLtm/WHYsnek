@@ -19,6 +19,7 @@ def start():
         taunt = "Seriously?!",
         head_type = "fang",
         tail_type = "regular",
+        head_url = "https://avatarfiles.alphacoders.com/108/108917.png"
         secondary_color = "#f4f4f0",
     )
 
