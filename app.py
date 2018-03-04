@@ -5,7 +5,6 @@ from brain import decide
 
 app = Flask(__name__)
 
-# a method to dig json
 
 
 # the webhooks
@@ -33,12 +32,9 @@ def move():
         taunt = 'msg'
     )
 
-#log and learn?
 @app.route("/end", methods=["POST"])
 def end():
-    data=request.get_json()
-    with open("survivedTurns.txt","a") as fo:
-        fo.write(str(data))
+  
 
 
 
